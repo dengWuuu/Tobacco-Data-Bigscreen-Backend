@@ -1,0 +1,16 @@
+#dev环境  mysql7.0
+spring:
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:D:\\GithubProject\go-view-serve\sqllite\goview.db
+    #linux服务器
+    #url: jdbc:sqlite://home/cqfy/project/OSSDATABASE/oss.db
+    username: 
+    password: 
+    ### 连接池配置
+    druid:
+      initial-size: 10
+      max-active: 100
+      min-idle: 30
+      max-wait: 40
+      validation-query: SELECT 1
