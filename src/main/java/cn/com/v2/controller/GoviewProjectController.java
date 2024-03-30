@@ -87,7 +87,7 @@ public class GoviewProjectController  extends BaseController{
 	@PostMapping("/create")
 	@ResponseBody
 	public AjaxResult add(@RequestBody GoviewProject goviewProject){
-		goviewProject.setCreateTime(DateUtil.now());
+ 		goviewProject.setCreateTime(DateUtil.now());
 		goviewProject.setState(-1);
 		boolean b=iGoviewProjectService.save(goviewProject);
 		if(b){
@@ -153,10 +153,10 @@ public class GoviewProjectController  extends BaseController{
     public AjaxResult updateVisible(@RequestBody GoviewProject goviewProject){
     	if(goviewProject.getState()==-1||goviewProject.getState()==1) {
     	
-    		LambdaUpdateWrapper<GoviewProject> updateWrapper=new LambdaUpdateWrapper<GoviewProject>();
+    		LambdaUpdateWrapper<GoviewProject> updateWrapper= new LambdaUpdateWrapper<>();
     		updateWrapper.eq(GoviewProject::getId, goviewProject.getId());
     		updateWrapper.set(GoviewProject::getState, goviewProject.getState());
-    		Boolean b=iGoviewProjectService.update(updateWrapper);
+    		boolean b=iGoviewProjectService.update(updateWrapper);
     		if(b){
             	return success();
             }
@@ -209,7 +209,6 @@ public class GoviewProjectController  extends BaseController{
 	/**
 	 * 上传文件
 	 * @param object 文件流对象
-	 * @param bucketName 桶名
 	 * @return
 	 * @throws Exception
 	 */

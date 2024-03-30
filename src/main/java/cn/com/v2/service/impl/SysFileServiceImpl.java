@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author fc
@@ -18,13 +18,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> implements ISysFileService {
-	@Autowired
-	private SysFileMapper sysFileMapper;
-	
-	@Override
-	public SysFile selectByExamplefileName(String filename) {
-		SysFile sysFile=sysFileMapper.selectOne(new LambdaQueryWrapper<SysFile>().eq(SysFile::getFileName, filename));
+    @Autowired
+    private SysFileMapper sysFileMapper;
+
+    @Override
+    public SysFile selectByExamplefileName(String filename) {
+        SysFile sysFile = sysFileMapper.selectOne(new LambdaQueryWrapper<SysFile>().eq(SysFile::getFileName, filename));
         return sysFile;
-	}
+    }
 
 }
