@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @TableName("t_sell_record")
 @Data
-public class Tobacco_Sell_Record {
+public class TobaccoSellRecord {
     // main.sql中的sql语句定义出对象属性
     private static final long serialVersionUID = 1L;
     @TableId(type = IdType.ASSIGN_ID)
