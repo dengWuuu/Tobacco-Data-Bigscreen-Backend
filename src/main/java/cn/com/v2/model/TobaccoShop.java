@@ -7,7 +7,7 @@ import lombok.Data;
  * @author Wu
  * @date 2024年03月30日 20:52
  */
-@TableName("t_consumer")
+@TableName("t_shop")
 @Data
 public class TobaccoShop {
     // main.sql中的sql语句定义出对象属性

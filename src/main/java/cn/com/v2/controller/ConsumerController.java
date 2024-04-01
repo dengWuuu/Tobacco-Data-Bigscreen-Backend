@@ -21,7 +21,7 @@ import static cn.com.v2.common.domain.AjaxResult.success;
  * @author Wu
  * @date 2024年03月31日 11:01
  */
-@Api(value = "文件上传")
+@Api(value = "用户接口")
 @RestController
 @RequestMapping("/api/consumer")
 @Slf4j
