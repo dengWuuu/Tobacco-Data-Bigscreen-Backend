@@ -15,9 +15,11 @@ public class TobaccoSellRecord {
     @TableId(type = IdType.ASSIGN_ID)
     private String id;
 
-    private String consumer_id;
+    @TableField("consumer_id")
+    private String consumerId;
 
-    private String spu_id;
+    @TableField("spu_id")
+    private String spuId;
 
     @TableField(fill = FieldFill.INSERT)
     private String createTime;

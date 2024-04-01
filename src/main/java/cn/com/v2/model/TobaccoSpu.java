@@ -7,7 +7,7 @@ import lombok.Data;
  * @author Wu
  * @date 2024年03月30日 20:46
  */
-@TableName("t_consumer")
+@TableName("t_spu")
 @Data
 public class TobaccoSpu {
     // main.sql中的sql语句定义出对象属性
@@ -15,7 +15,8 @@ public class TobaccoSpu {
     @TableId(type = IdType.ASSIGN_ID)
     private String id;
 
-    private String skuName;
+    @TableField("sku_name")
+    private String name;
 
     private String price;
 
