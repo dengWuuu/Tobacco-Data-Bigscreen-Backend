@@ -18,7 +18,14 @@ public class TobaccoSpu {
     @TableField("sku_name")
     private String name;
 
-    private String price;
+    // 售价
+    private Integer price;
+
+    // 进价
+    private Integer purchasePrice;
+
+    // 类型
+    private Integer type;
 
     private String image;
 
