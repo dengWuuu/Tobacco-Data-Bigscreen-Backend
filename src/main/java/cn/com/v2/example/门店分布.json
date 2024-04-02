@@ -1,0 +1,16 @@
+{
+  "dimensions": [
+    "name",
+    "value"
+  ],
+  "source": [
+    {
+      "name": "白云区",
+      "value": 20
+    },
+    {
+      "name": "荔湾区",
+      "value": 40
+    }
+  ]
+}

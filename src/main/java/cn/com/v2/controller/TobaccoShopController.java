@@ -4,6 +4,7 @@ import cn.com.v2.common.config.V2Config;
 import cn.com.v2.common.domain.AjaxResult;
 import cn.com.v2.model.TobaccoShop;
 import cn.com.v2.service.TobaccoShopService;
+import cn.hutool.json.JSONObject;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,18 +44,23 @@ public class TobaccoShopController {
         return error();
     }
 
-    @GetMapping("/get_area_value")
+    @GetMapping("/get-area-value")
     public AjaxResult getAreaValue() {
-        List<TobaccoShop> list = tobaccoShopService.list();
-        if (list == null) {
-            return error();
-        }
-        // 用 map 统计每个地区多少个店
-        Map<String, Integer> map = new HashMap<>();
-        for (TobaccoShop tobaccoShop : list) {
-            map.put(tobaccoShop.getBase(), map.getOrDefault(tobaccoShop.getBase(), 0) + 1);
-        }
-        return success().put("data", map);
+        Map<String, Integer> map = tobaccoShopService.getBaseCnt();
+        JSONObject source = new JSONObject() {{
+            putOnce("dimensions", new String[]{"name", "value"});
+            List<JSONObject> list = new LinkedList<>();
+
+            for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.putOnce("name", entry.getKey());
+                jsonObject.putOnce("value", entry.getValue());
+                list.add(jsonObject);
+            }
+            putOnce("source", list);
+
+        }};
+        return success().put("data", source);
     }
 
 }
