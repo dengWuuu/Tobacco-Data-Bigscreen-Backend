@@ -1,0 +1,16 @@
+{
+  "dimensions": [
+    "product",
+    "data"
+  ],
+  "source": [
+    {
+      "product": "卷烟销售",
+      "data": 120
+    },
+    {
+      "product": "非卷烟销售",
+      "data": 200
+    }
+  ]
+}

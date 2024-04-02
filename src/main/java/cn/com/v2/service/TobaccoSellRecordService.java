@@ -5,6 +5,7 @@ import cn.com.v2.model.vo.TobaccoSellRecordVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Wu
@@ -14,4 +15,10 @@ public interface TobaccoSellRecordService extends IService<TobaccoSellRecord> {
 
     // 获取所有商品购买记录的所有信息
     public List<TobaccoSellRecordVo> getAllSellRecordInfo();
+
+    // 获取商品销售类型数量
+    public Map<Integer, Integer> getSellTypeCount();
+
+    // 获取商品销售类型毛利率
+    public Map<Integer, Double> getSellTypeProfit();
 }

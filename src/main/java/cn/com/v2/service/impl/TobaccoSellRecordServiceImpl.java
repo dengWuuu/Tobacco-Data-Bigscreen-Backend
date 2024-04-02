@@ -2,17 +2,22 @@ package cn.com.v2.service.impl;
 
 import cn.com.v2.mapper.TobaccoSellRecordMapper;
 import cn.com.v2.mapper.TobaccoSpuMapper;
+import cn.com.v2.model.SpuType;
 import cn.com.v2.model.TobaccoSellRecord;
 import cn.com.v2.model.TobaccoSpu;
 import cn.com.v2.model.vo.TobaccoSellRecordVo;
 import cn.com.v2.service.TobaccoSellRecordService;
-import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Wu
@@ -49,4 +54,56 @@ public class TobaccoSellRecordServiceImpl extends ServiceImpl<TobaccoSellRecordM
         }
         return result;
     }
+
+    @Override
+    public Map<Integer, Integer> getSellTypeCount() {
+        List<TobaccoSellRecord> tobaccoSellRecords = tobaccoSellRecordMapper.selectList(null);
+        Map<Integer, Integer> map = new HashMap<>();
+        for (TobaccoSellRecord tobaccoSellRecord : tobaccoSellRecords) {
+            String spuId = tobaccoSellRecord.getSpuId();
+            TobaccoSpu tobaccoSpu = tobaccoSpuMapper.selectById(spuId);
+            map.put(tobaccoSpu.getType(), map.getOrDefault(tobaccoSpu.getType(), 0) + tobaccoSpu.getPrice());
+        }
+        return map;
+    }
+
+    @Override
+    public Map<Integer, Double> getSellTypeProfit() {
+        Map<Integer, Double> profitMap = new HashMap<>();
+        List<TobaccoSellRecord> tobaccoSellRecords = tobaccoSellRecordMapper.selectList(null);
+        int totalTobaccoPrice = 0, totalTobaccoCost = 0;
+        int otherPrice = 0, otherCost = 0;
+        for (TobaccoSellRecord tobaccoSellRecord : tobaccoSellRecords) {
+            String spuId = tobaccoSellRecord.getSpuId();
+            TobaccoSpu tobaccoSpu = tobaccoSpuMapper.selectById(spuId);
+            if (tobaccoSpu.getType() == SpuType.TOBACCO.getCode()) {
+                totalTobaccoPrice += tobaccoSpu.getPrice();
+                totalTobaccoCost += tobaccoSpu.getPurchasePrice();
+                continue;
+            }
+            otherPrice += tobaccoSpu.getPrice();
+            otherCost += tobaccoSpu.getPurchasePrice();
+        }
+        double tobaccoProfit = (double) (totalTobaccoPrice - totalTobaccoCost) / (double) totalTobaccoCost;
+        double otherProfit = (double) (otherPrice - otherCost) / (double) otherCost;
+        profitMap.put(SpuType.TOBACCO.getCode(), halfUp(tobaccoProfit));
+        profitMap.put(SpuType.OTHER.getCode(), halfUp(otherProfit));
+        return profitMap;
+    }
+
+    public double halfUp(double x) {
+        DecimalFormat dFormat = new DecimalFormat();
+        dFormat.setMaximumFractionDigits(4);
+        dFormat.setGroupingSize(0);
+        dFormat.setRoundingMode(RoundingMode.FLOOR);
+        String str = dFormat.format(x);
+
+        double v = Double.parseDouble(str);
+        v *= 100;
+        dFormat.setMaximumFractionDigits(2);
+        str = dFormat.format(v);
+        v = Double.parseDouble(str);
+        return v;
+    }
 }
+
