@@ -62,13 +62,13 @@ public class TobaccoSellRecordController {
         // 烟草相关信息
         int finalTobaccoCount = tobaccoCount;
         HashMap<String, Object> tobaccoHashMap = new HashMap<String, Object>() {{
-            put("product", "卷烟销售");
+            put("product", "卷烟销售额");
             put("data", finalTobaccoCount);
         }};
         // 其他商品相关信息
         int finalOther = other;
         HashMap<String, Object> otherHashMap = new HashMap<String, Object>() {{
-            put("product", "非卷烟销售");
+            put("product", "非卷烟销售额");
             put("data", finalOther);
         }};
 

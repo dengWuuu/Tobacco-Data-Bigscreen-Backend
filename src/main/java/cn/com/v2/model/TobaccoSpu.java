@@ -40,4 +40,7 @@ public class TobaccoSpu {
     private String createUser;
 
     private String updateUser;
+
+    @TableField(exist = false)
+    private Double profit;
 }

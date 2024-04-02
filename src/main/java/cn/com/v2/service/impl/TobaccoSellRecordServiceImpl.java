@@ -7,6 +7,7 @@ import cn.com.v2.model.TobaccoSellRecord;
 import cn.com.v2.model.TobaccoSpu;
 import cn.com.v2.model.vo.TobaccoSellRecordVo;
 import cn.com.v2.service.TobaccoSellRecordService;
+import cn.com.v2.util.NumberUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Wu
@@ -86,24 +84,9 @@ public class TobaccoSellRecordServiceImpl extends ServiceImpl<TobaccoSellRecordM
         }
         double tobaccoProfit = (double) (totalTobaccoPrice - totalTobaccoCost) / (double) totalTobaccoCost;
         double otherProfit = (double) (otherPrice - otherCost) / (double) otherCost;
-        profitMap.put(SpuType.TOBACCO.getCode(), halfUp(tobaccoProfit));
-        profitMap.put(SpuType.OTHER.getCode(), halfUp(otherProfit));
+        profitMap.put(SpuType.TOBACCO.getCode(), NumberUtil.halfUp(tobaccoProfit));
+        profitMap.put(SpuType.OTHER.getCode(), NumberUtil.halfUp(otherProfit));
         return profitMap;
-    }
-
-    public double halfUp(double x) {
-        DecimalFormat dFormat = new DecimalFormat();
-        dFormat.setMaximumFractionDigits(4);
-        dFormat.setGroupingSize(0);
-        dFormat.setRoundingMode(RoundingMode.FLOOR);
-        String str = dFormat.format(x);
-
-        double v = Double.parseDouble(str);
-        v *= 100;
-        dFormat.setMaximumFractionDigits(2);
-        str = dFormat.format(v);
-        v = Double.parseDouble(str);
-        return v;
     }
 }
 

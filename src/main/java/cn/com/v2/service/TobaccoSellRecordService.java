@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 /**
  * @author Wu
@@ -21,4 +22,5 @@ public interface TobaccoSellRecordService extends IService<TobaccoSellRecord> {
 
     // 获取商品销售类型毛利率
     public Map<Integer, Double> getSellTypeProfit();
+
 }
