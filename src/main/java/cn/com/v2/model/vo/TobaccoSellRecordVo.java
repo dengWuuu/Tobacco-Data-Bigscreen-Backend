@@ -17,5 +17,6 @@ public class TobaccoSellRecordVo {
     private Integer price;
     private String image;
     private Integer profitCount;
+    private Integer reBuyCount;
 
 }

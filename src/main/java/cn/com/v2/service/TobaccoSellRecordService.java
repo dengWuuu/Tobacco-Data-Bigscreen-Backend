@@ -25,9 +25,15 @@ public interface TobaccoSellRecordService extends IService<TobaccoSellRecord> {
 
     /**
      * 获取销售获取净利润最高的十个商品
+     *
      * @param type 类型
      * @return 10个对应的商品
      */
     public PriorityQueue<TobaccoSellRecordVo> getTopTenProfit(int type);
+
+    /**
+     * 获取客户复购产品前十
+     */
+    public PriorityQueue<TobaccoSellRecordVo> getTopTenReBuy();
 
 }

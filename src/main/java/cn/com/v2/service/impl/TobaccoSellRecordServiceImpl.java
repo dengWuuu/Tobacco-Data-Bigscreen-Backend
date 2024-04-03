@@ -12,9 +12,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -121,6 +118,58 @@ public class TobaccoSellRecordServiceImpl extends ServiceImpl<TobaccoSellRecordM
                 TobaccoSellRecordVo vo = new TobaccoSellRecordVo();
                 vo.setName(entry.getKey());
                 vo.setProfitCount(entry.getValue());
+                priorityQueue.add(vo);
+            }
+        }
+        return priorityQueue;
+    }
+
+    @Override
+    public PriorityQueue<TobaccoSellRecordVo> getTopTenReBuy() {
+        // 针对每一个用户查询出复购的产品，然后在 map 里记上对应的 cnt
+        List<TobaccoSellRecord> tobaccoSellRecords = tobaccoSellRecordMapper.selectList(null);
+        // 所有的购买记录存入 map 中格式为 key:consumerID_SpuName value:boolean
+        Map<String, Boolean> map = new HashMap<>();
+        for (TobaccoSellRecord record : tobaccoSellRecords) {
+            String consumerId = record.getConsumerId();
+            // 获取商品名字
+            String spuId = record.getSpuId();
+            TobaccoSpu tobaccoSpu = tobaccoSpuMapper.selectById(spuId);
+            String spuName = tobaccoSpu.getName();
+
+            // 如果 map 中没有这个 key 则直接插入
+            if (!map.containsKey(consumerId + "_" + spuName)) {
+                map.put(consumerId + "_" + spuName, true);
+            }
+        }
+        Map<String, Integer> reBuyCntMap = new HashMap<>();
+        // 对复购过的产品进行技术
+        for (Map.Entry<String, Boolean> entry : map.entrySet()) {
+            if (entry.getValue()) {
+                String[] split = entry.getKey().split("_");
+                String spuName = split[1];
+                reBuyCntMap.put(spuName, reBuyCntMap.getOrDefault(spuName, 0) + 1);
+            }
+        }
+        // 挑选出复购前十的产品名字
+        PriorityQueue<TobaccoSellRecordVo> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(TobaccoSellRecordVo::getReBuyCount));
+        int size = 0;
+        for (Map.Entry<String, Integer> entry : reBuyCntMap.entrySet()) {
+            if (size < 10) {
+                TobaccoSellRecordVo vo = new TobaccoSellRecordVo();
+                vo.setName(entry.getKey());
+                vo.setReBuyCount(entry.getValue());
+                priorityQueue.add(vo);
+                size++;
+                continue;
+            }
+            TobaccoSellRecordVo peek = priorityQueue.peek();
+            assert peek != null;
+            if (peek.getReBuyCount() < entry.getValue()) {
+                priorityQueue.poll();
+                TobaccoSellRecordVo vo = new TobaccoSellRecordVo();
+                vo.setName(entry.getKey());
+                vo.setReBuyCount(entry.getValue());
                 priorityQueue.add(vo);
             }
         }

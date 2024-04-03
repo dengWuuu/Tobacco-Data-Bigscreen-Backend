@@ -3,6 +3,7 @@ package cn.com.v2.controller;
 import cn.com.v2.common.config.V2Config;
 import cn.com.v2.common.domain.AjaxResult;
 import cn.com.v2.model.SpuType;
+import cn.com.v2.model.TobaccoSpu;
 import cn.com.v2.model.vo.TobaccoSellRecordVo;
 import cn.com.v2.service.TobaccoSellRecordService;
 import cn.hutool.json.JSONObject;
@@ -114,6 +115,27 @@ public class TobaccoSellRecordController {
                     putOnce("data", poll.getProfitCount());
                 }};
                 list.add(0, product);
+            }
+            putOnce("source", list);
+        }};
+        return success().put("data", source);
+    }
+
+    // 返回销售的 spu 类型复购前 10 json
+    @GetMapping("/re-buy-10")
+    public AjaxResult reBuyTen() {
+        PriorityQueue<TobaccoSellRecordVo> topTenReBuy = tobaccoSellRecordService.getTopTenReBuy();
+        JSONObject source = new JSONObject() {{
+            putOnce("dimensions", new String[]{"product", "data"});
+            List<JSONObject> list = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                if (topTenReBuy.isEmpty()) break;
+                TobaccoSellRecordVo poll = topTenReBuy.poll();
+                JSONObject product = new JSONObject() {{
+                    putOnce("product", poll.getName());
+                    putOnce("data", poll.getReBuyCount());
+                }};
+                list.add(product);
             }
             putOnce("source", list);
         }};
