@@ -1,0 +1,28 @@
+{
+  "dimensions": [
+    "product",
+    "data"
+  ],
+  "source": [
+    {
+      "product": "中华（硬）净利润",
+      "data": 4000
+    },
+    {
+      "product": "中华（硬）净利润",
+      "data": 3800
+    },
+    {
+      "product": "中华（硬）净利润",
+      "data": 3600
+    },
+    {
+      "product": "中华（硬）净利润",
+      "data": 3400
+    },
+    {
+      "product": "中华（硬）净利润",
+      "data": 3200
+    }
+  ]
+}

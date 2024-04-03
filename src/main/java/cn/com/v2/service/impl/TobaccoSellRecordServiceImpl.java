@@ -88,5 +88,43 @@ public class TobaccoSellRecordServiceImpl extends ServiceImpl<TobaccoSellRecordM
         profitMap.put(SpuType.OTHER.getCode(), NumberUtil.halfUp(otherProfit));
         return profitMap;
     }
+
+    @Override
+    public PriorityQueue<TobaccoSellRecordVo> getTopTenProfit(int type) {
+        List<TobaccoSellRecord> tobaccoSellRecords = tobaccoSellRecordMapper.selectList(null);
+        Map<String, Integer> map = new HashMap<>();
+        for (TobaccoSellRecord tobaccoSellRecord : tobaccoSellRecords) {
+            String spuId = tobaccoSellRecord.getSpuId();
+            TobaccoSpu tobaccoSpu = tobaccoSpuMapper.selectById(spuId);
+            if (type == SpuType.TOBACCO.getCode() && tobaccoSpu.getType() == type) {
+                map.put(tobaccoSpu.getName(), map.getOrDefault(tobaccoSpu.getName(), 0) + tobaccoSpu.getPrice() - tobaccoSpu.getPurchasePrice());
+            }
+            if (type == SpuType.OTHER.getCode() && tobaccoSpu.getType() != SpuType.TOBACCO.getCode()) {
+                map.put(tobaccoSpu.getName(), map.getOrDefault(tobaccoSpu.getName(), 0) + tobaccoSpu.getPrice() - tobaccoSpu.getPurchasePrice());
+            }
+        }
+        PriorityQueue<TobaccoSellRecordVo> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(TobaccoSellRecordVo::getProfitCount));
+        int size = 0;
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            if (size < 10) {
+                TobaccoSellRecordVo vo = new TobaccoSellRecordVo();
+                vo.setName(entry.getKey());
+                vo.setProfitCount(entry.getValue());
+                priorityQueue.add(vo);
+                size++;
+                continue;
+            }
+            TobaccoSellRecordVo peek = priorityQueue.peek();
+            assert peek != null;
+            if (peek.getProfitCount() < entry.getValue()) {
+                priorityQueue.poll();
+                TobaccoSellRecordVo vo = new TobaccoSellRecordVo();
+                vo.setName(entry.getKey());
+                vo.setProfitCount(entry.getValue());
+                priorityQueue.add(vo);
+            }
+        }
+        return priorityQueue;
+    }
 }
 

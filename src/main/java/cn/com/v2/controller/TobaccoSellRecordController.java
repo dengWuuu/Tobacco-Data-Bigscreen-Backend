@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static cn.com.v2.common.domain.AjaxResult.error;
 import static cn.com.v2.common.domain.AjaxResult.success;
@@ -97,6 +95,27 @@ public class TobaccoSellRecordController {
         JSONObject source = new JSONObject() {{
             putOnce("dimensions", new String[]{"product", "data"});
             putOnce("source", new HashMap[]{tobaccoHashMap, otherHashMap});
+        }};
+        return success().put("data", source);
+    }
+
+    // 返回销售的 spu 类型毛利率 json
+    @GetMapping("/type-profit-count")
+    public AjaxResult typeProfitCount(int type) {
+        PriorityQueue<TobaccoSellRecordVo> topTenProfit = tobaccoSellRecordService.getTopTenProfit(type);
+        JSONObject source = new JSONObject() {{
+            putOnce("dimensions", new String[]{"product", "data"});
+            List<JSONObject> list = new LinkedList<>();
+            for (int i = 0; i < 10; i++) {
+                if (topTenProfit.isEmpty()) break;
+                TobaccoSellRecordVo poll = topTenProfit.poll();
+                JSONObject product = new JSONObject() {{
+                    putOnce("product", poll.getName());
+                    putOnce("data", poll.getProfitCount());
+                }};
+                list.add(0, product);
+            }
+            putOnce("source", list);
         }};
         return success().put("data", source);
     }
