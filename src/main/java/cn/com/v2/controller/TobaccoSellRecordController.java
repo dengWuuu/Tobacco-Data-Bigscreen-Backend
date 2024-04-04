@@ -111,7 +111,7 @@ public class TobaccoSellRecordController {
                 if (topTenProfit.isEmpty()) break;
                 TobaccoSellRecordVo poll = topTenProfit.poll();
                 JSONObject product = new JSONObject() {{
-                    putOnce("product", poll.getName());
+                    putOnce("product", poll.getName() + " - 净利润");
                     putOnce("data", poll.getProfitCount());
                 }};
                 list.add(0, product);
@@ -126,14 +126,14 @@ public class TobaccoSellRecordController {
     public AjaxResult reBuyTen() {
         PriorityQueue<TobaccoSellRecordVo> topTenReBuy = tobaccoSellRecordService.getTopTenReBuy();
         JSONObject source = new JSONObject() {{
-            putOnce("dimensions", new String[]{"product", "data"});
+            putOnce("dimensions", new String[]{"product", "复购商品数量"});
             List<JSONObject> list = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 if (topTenReBuy.isEmpty()) break;
                 TobaccoSellRecordVo poll = topTenReBuy.poll();
                 JSONObject product = new JSONObject() {{
                     putOnce("product", poll.getName());
-                    putOnce("data", poll.getReBuyCount());
+                    putOnce("复购商品数量", poll.getReBuyCount());
                 }};
                 list.add(product);
             }

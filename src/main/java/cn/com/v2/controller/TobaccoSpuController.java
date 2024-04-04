@@ -2,6 +2,7 @@ package cn.com.v2.controller;
 
 import cn.com.v2.common.config.V2Config;
 import cn.com.v2.common.domain.AjaxResult;
+import cn.com.v2.model.SpuType;
 import cn.com.v2.model.TobaccoSpu;
 import cn.com.v2.service.TobaccoSpuService;
 import cn.hutool.json.JSON;
@@ -62,14 +63,17 @@ public class TobaccoSpuController {
     public AjaxResult typeProfitTen(int type) {
         PriorityQueue<TobaccoSpu> tobaccoSellProfitTop10 = tobaccoSpuService.getTobaccoSellProfitTop10(type);
         JSONObject source = new JSONObject() {{
-            putOnce("dimensions", new String[]{"product", "卷烟毛利率前十商品(百分比)"});
+            if (type == SpuType.TOBACCO.getCode())
+                putOnce("dimensions", new String[]{"product", "卷烟毛利率前十商品(百分比)"});
+            else putOnce("dimensions", new String[]{"product", "非卷烟毛利率前十商品(百分比)"});
             List<JSONObject> list = new LinkedList<>();
             for (int i = 0; i < 10; i++) {
                 if (tobaccoSellProfitTop10.isEmpty()) break;
                 JSONObject product = new JSONObject() {{
                     TobaccoSpu poll = tobaccoSellProfitTop10.poll();
                     putOnce("product", poll.getName());
-                    putOnce("卷烟毛利率前十商品(百分比)", poll.getProfit());
+                    if (type == SpuType.TOBACCO.getCode()) putOnce("卷烟毛利率前十商品(百分比)", poll.getProfit());
+                    else putOnce("非卷烟毛利率前十商品(百分比)", poll.getProfit());
 
                 }};
                 list.add(0, product);
