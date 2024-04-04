@@ -17,4 +17,9 @@ public interface TobaccoSpuService extends IService<TobaccoSpu> {
      * @param type 商品类型 1代表卷烟, 4代表其他
      */
     public PriorityQueue<TobaccoSpu> getTobaccoSellProfitTop10(int type);
+
+    /**
+     * 获取门店上架规格数量
+     */
+    public Map<Integer, Integer> getSpuListingCount();
 }

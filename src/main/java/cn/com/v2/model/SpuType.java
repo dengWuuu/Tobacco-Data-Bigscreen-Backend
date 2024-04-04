@@ -6,8 +6,8 @@ package cn.com.v2.model;
  */
 public enum SpuType {
     TOBACCO(1, "卷烟"),
-    ALCOHOL(2, "酒水"),
-    SNACK(3, "零食"),
+    SNACK(2, "零食"),
+    ALCOHOL(3, "酒水"),
     OTHER(4, "其他");
 
     private final Integer code;
@@ -24,5 +24,13 @@ public enum SpuType {
 
     public String getName() {
         return name;
+    }
+    public static SpuType getByCode(Integer code) {
+        for (SpuType value : values()) {
+            if (value.code.equals(code)) {
+                return value;
+            }
+        }
+        return null;
     }
 }

@@ -7,6 +7,7 @@ import cn.com.v2.model.TobaccoSpu;
 import cn.com.v2.service.TobaccoSpuService;
 import cn.com.v2.util.NumberUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,5 +64,16 @@ public class TobaccoSpuServiceImpl extends ServiceImpl<TobaccoSpuMapper, Tobacco
 
         }
         return priorityQueue;
+    }
+
+    @Override
+    public Map<Integer, Integer> getSpuListingCount() {
+        Map<Integer, Integer> map = new HashMap<>();
+        List<TobaccoSpu> tobaccoSpus = tobaccoSpuMapper.selectList(null);
+        for (TobaccoSpu tobaccoSpu : tobaccoSpus) {
+            if (Objects.equals(tobaccoSpu.getStatus(), "1"))
+                map.put(tobaccoSpu.getType(), map.getOrDefault(tobaccoSpu.getType(), 0) + 1);
+        }
+        return map;
     }
 }

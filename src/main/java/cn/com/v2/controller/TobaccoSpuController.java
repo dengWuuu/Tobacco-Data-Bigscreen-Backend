@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 import static cn.com.v2.common.domain.AjaxResult.error;
 import static cn.com.v2.common.domain.AjaxResult.success;
@@ -78,6 +75,24 @@ public class TobaccoSpuController {
                 }};
                 list.add(0, product);
 
+            }
+            putOnce("source", list);
+        }};
+        return success().put("data", source);
+    }
+
+    @GetMapping("/listing-count")
+    public AjaxResult listingCount() {
+        Map<Integer, Integer> map = tobaccoSpuService.getSpuListingCount();
+        JSONObject source = new JSONObject() {{
+            putOnce("dimensions", new String[]{"product", "门店上架规格数量"});
+            List<JSONObject> list = new LinkedList<>();
+            for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+                JSONObject product = new JSONObject() {{
+                    putOnce("product", Objects.requireNonNull(SpuType.getByCode(entry.getKey())).getName());
+                    putOnce("门店上架规格数量", entry.getValue());
+                }};
+                list.add(product);
             }
             putOnce("source", list);
         }};
