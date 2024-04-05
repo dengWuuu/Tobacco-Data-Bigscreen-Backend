@@ -23,7 +23,7 @@ import cn.hutool.crypto.SecureUtil;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api/goview/sys")
+@RequestMapping("/api/sys")
 public class ApiController  extends BaseController {
 	@Autowired
 	private ISysUserService iSysUserService;

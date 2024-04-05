@@ -5,17 +5,13 @@ import cn.com.v2.common.domain.AjaxResult;
 import cn.com.v2.model.TobaccoShop;
 import cn.com.v2.service.TobaccoShopService;
 import cn.hutool.json.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static cn.com.v2.common.domain.AjaxResult.error;
 import static cn.com.v2.common.domain.AjaxResult.success;
@@ -36,10 +32,54 @@ public class TobaccoShopController {
 
     // 获取所有店铺
     @GetMapping("/list")
-    public AjaxResult list() {
-        List<TobaccoShop> list = tobaccoShopService.list();
+    public AjaxResult list(int page, int size) {
+        // 分页查询 构造page
+        Page<TobaccoShop> p = new Page<>(page, size);
+        Page<TobaccoShop> pageList = tobaccoShopService.page(p);
+        List<TobaccoShop> list = pageList.getRecords();
+        JSONObject data = new JSONObject();
+        data.putOnce("shops", list);
+
+        // 放入页数相关信息
+        data.putOnce("total", pageList.getTotal());
+        data.putOnce("size", pageList.getSize());
+        data.putOnce("current", pageList.getCurrent());
+
         if (list != null) {
-            return success().put("data", list);
+            return success().put("data", data);
+        }
+        return error();
+    }
+
+    // 添加商铺
+    @PostMapping("/update")
+    public AjaxResult add(@RequestBody TobaccoShop tobaccoShop) {
+        boolean save;
+        if (Objects.equals(tobaccoShop.getId(), "")) save = tobaccoShopService.save(tobaccoShop);
+        else save = tobaccoShopService.updateById(tobaccoShop);
+
+        if (save) {
+            return success();
+        }
+        return error();
+    }
+
+    // 删除商铺
+    @DeleteMapping("/remove")
+    public AjaxResult remove(String id) {
+        boolean remove = tobaccoShopService.removeById(id);
+        if (remove) {
+            return success();
+        }
+        return error();
+    }
+
+    // 批量删除商铺
+    @DeleteMapping("/remove-batch")
+    public AjaxResult removeBatch(String[] ids) {
+        boolean remove = tobaccoShopService.removeByIds(Arrays.asList(ids));
+        if (remove) {
+            return success();
         }
         return error();
     }

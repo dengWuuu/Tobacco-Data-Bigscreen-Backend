@@ -17,10 +17,12 @@ public class TobaccoShop {
 
     private String base;
 
+    private String detail;
+
     @TableField(fill = FieldFill.INSERT)
     private String createTime;
 
-    @TableField(fill = FieldFill.INSERT)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateTime;
 
     private String createUser;

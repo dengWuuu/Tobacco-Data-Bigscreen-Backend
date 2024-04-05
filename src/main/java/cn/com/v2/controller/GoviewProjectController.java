@@ -43,7 +43,7 @@ import java.util.List;
  * @since 2023-04-30
  */
 @RestController
-@RequestMapping("/api/goview/project")
+@RequestMapping("/api/project")
 public class GoviewProjectController extends BaseController {
     @Autowired
     private ISysFileService iSysFileService;
