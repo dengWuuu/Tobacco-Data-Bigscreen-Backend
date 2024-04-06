@@ -32,7 +32,19 @@ public class TobaccoShopController {
 
     // 获取所有店铺
     @GetMapping("/list")
-    public AjaxResult list(int page, int size) {
+    public AjaxResult list(int page, int size, String shopBase, String shopDetail) {
+        // 判断是不是条件查询
+        if (!Objects.equals(shopBase, "") || !Objects.equals(shopDetail, "")) {
+            Page<TobaccoShop> list = tobaccoShopService.selectByBaseOrDetail(page, size, shopBase, shopDetail);
+            JSONObject data = new JSONObject();
+            data.putOnce("shops", list.getRecords());
+            data.putOnce("total", list.getTotal());
+            data.putOnce("size", list.getSize());
+            data.putOnce("current", list.getCurrent());
+            return success().put("data", data);
+        }
+
+
         // 分页查询 构造page
         Page<TobaccoShop> p = new Page<>(page, size);
         Page<TobaccoShop> pageList = tobaccoShopService.page(p);
