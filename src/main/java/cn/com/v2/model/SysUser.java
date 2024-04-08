@@ -1,8 +1,6 @@
 package cn.com.v2.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 
 import lombok.Data;
 
@@ -10,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author fc
@@ -34,6 +32,11 @@ public class SysUser implements Serializable {
     private Integer depId;
 
     private String posId;
+    @TableField(fill = FieldFill.INSERT)
+    private String createTime;
 
- 
+    @TableField(fill = FieldFill.INSERT)
+    private String updateTime;
+
+
 }
