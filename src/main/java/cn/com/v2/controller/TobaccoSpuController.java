@@ -74,6 +74,26 @@ public class TobaccoSpuController {
         return error();
     }
 
+    // 删除接口
+    @DeleteMapping("/remove")
+    public AjaxResult remove(String id) {
+        boolean remove = tobaccoSpuService.removeById(id);
+        if (remove) {
+            return success();
+        }
+        return error();
+    }
+
+    // 批量删除接口
+    @DeleteMapping("/remove-batch")
+    public AjaxResult removeBatch(String[] ids) {
+        boolean remove = tobaccoSpuService.removeByIds(Arrays.asList(ids));
+        if (remove) {
+            return success();
+        }
+        return error();
+    }
+
     // 分页查询商品
     @GetMapping("/list_page")
     public AjaxResult listPage(int current, int size) {

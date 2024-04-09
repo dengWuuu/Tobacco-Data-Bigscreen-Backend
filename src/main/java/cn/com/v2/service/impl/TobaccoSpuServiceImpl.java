@@ -83,7 +83,7 @@ public class TobaccoSpuServiceImpl extends ServiceImpl<TobaccoSpuMapper, Tobacco
     public Page<TobaccoSpu> selectBySkuName(Page<TobaccoSpu> page, String skuName) {
         QueryWrapper<TobaccoSpu> queryWrapper = new QueryWrapper<>();
         if (skuName != null && !Objects.equals(skuName, "")) {
-            queryWrapper.like("name", skuName);
+            queryWrapper.like("sku_name", skuName);
         }
         return tobaccoSpuMapper.selectPage(page, queryWrapper);
     }
