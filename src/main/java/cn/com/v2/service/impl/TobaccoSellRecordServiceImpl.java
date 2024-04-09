@@ -42,7 +42,7 @@ public class TobaccoSellRecordServiceImpl extends ServiceImpl<TobaccoSellRecordM
             vo.setId(record.getId());
             vo.setConsumerId(record.getConsumerId());
             vo.setSpuId(record.getSpuId());
-            vo.setName(tobaccoSpu.getName());
+            vo.setName(tobaccoSpu.getSkuName());
             vo.setPrice(tobaccoSpu.getPrice());
             vo.setImage(tobaccoSpu.getImage());
             result.add(vo);
@@ -94,10 +94,10 @@ public class TobaccoSellRecordServiceImpl extends ServiceImpl<TobaccoSellRecordM
             String spuId = tobaccoSellRecord.getSpuId();
             TobaccoSpu tobaccoSpu = tobaccoSpuMapper.selectById(spuId);
             if (type == SpuType.TOBACCO.getCode() && tobaccoSpu.getType() == type) {
-                map.put(tobaccoSpu.getName(), map.getOrDefault(tobaccoSpu.getName(), 0) + tobaccoSpu.getPrice() - tobaccoSpu.getPurchasePrice());
+                map.put(tobaccoSpu.getSkuName(), map.getOrDefault(tobaccoSpu.getSkuName(), 0) + tobaccoSpu.getPrice() - tobaccoSpu.getPurchasePrice());
             }
             if (type == SpuType.OTHER.getCode() && tobaccoSpu.getType() != SpuType.TOBACCO.getCode()) {
-                map.put(tobaccoSpu.getName(), map.getOrDefault(tobaccoSpu.getName(), 0) + tobaccoSpu.getPrice() - tobaccoSpu.getPurchasePrice());
+                map.put(tobaccoSpu.getSkuName(), map.getOrDefault(tobaccoSpu.getSkuName(), 0) + tobaccoSpu.getPrice() - tobaccoSpu.getPurchasePrice());
             }
         }
         PriorityQueue<TobaccoSellRecordVo> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(TobaccoSellRecordVo::getProfitCount));
@@ -135,7 +135,7 @@ public class TobaccoSellRecordServiceImpl extends ServiceImpl<TobaccoSellRecordM
             // 获取商品名字
             String spuId = record.getSpuId();
             TobaccoSpu tobaccoSpu = tobaccoSpuMapper.selectById(spuId);
-            String spuName = tobaccoSpu.getName();
+            String spuName = tobaccoSpu.getSkuName();
 
             // 如果 map 中没有这个 key 则直接插入
             if (!map.containsKey(consumerId + "_" + spuName)) {

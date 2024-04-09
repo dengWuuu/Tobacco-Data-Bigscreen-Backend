@@ -1,6 +1,7 @@
 package cn.com.v2.service;
 
 import cn.com.v2.model.TobaccoSpu;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Map;
@@ -22,4 +23,9 @@ public interface TobaccoSpuService extends IService<TobaccoSpu> {
      * 获取门店上架规格数量
      */
     public Map<Integer, Integer> getSpuListingCount();
+
+    /**
+     * 条件查询
+     */
+    public Page<TobaccoSpu> selectBySkuName(Page<TobaccoSpu> page, String skuName);
 }

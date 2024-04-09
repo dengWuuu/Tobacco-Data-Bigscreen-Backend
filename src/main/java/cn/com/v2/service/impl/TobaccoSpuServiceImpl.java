@@ -6,6 +6,8 @@ import cn.com.v2.model.TobaccoSellRecord;
 import cn.com.v2.model.TobaccoSpu;
 import cn.com.v2.service.TobaccoSpuService;
 import cn.com.v2.util.NumberUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,5 +77,14 @@ public class TobaccoSpuServiceImpl extends ServiceImpl<TobaccoSpuMapper, Tobacco
                 map.put(tobaccoSpu.getType(), map.getOrDefault(tobaccoSpu.getType(), 0) + 1);
         }
         return map;
+    }
+
+    @Override
+    public Page<TobaccoSpu> selectBySkuName(Page<TobaccoSpu> page, String skuName) {
+        QueryWrapper<TobaccoSpu> queryWrapper = new QueryWrapper<>();
+        if (skuName != null && !Objects.equals(skuName, "")) {
+            queryWrapper.like("name", skuName);
+        }
+        return tobaccoSpuMapper.selectPage(page, queryWrapper);
     }
 }

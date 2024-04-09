@@ -16,7 +16,7 @@ public class TobaccoSpu {
     private String id;
 
     @TableField("sku_name")
-    private String name;
+    private String skuName;
 
     // 售价
     private Integer price;
@@ -32,9 +32,10 @@ public class TobaccoSpu {
     private String status;
 
     private Integer num;
-
+    @TableField(fill = FieldFill.INSERT)
     private String createTime;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateTime;
 
     private String createUser;

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import static cn.com.v2.common.domain.AjaxResult.error;
@@ -32,6 +33,14 @@ public class TobaccoSpuTypeController {
     // list接口 返回所有商品类型
     @GetMapping("/list")
     public AjaxResult list(int page, int size, String name) {
+        if (page == 0 && size == 0) {
+            // 不分页查询
+            JSONObject data = new JSONObject();
+            List<Type> list = tobaccoSpuTypeService.list();
+            data.putOnce("spuTypes", list);
+            data.putOnce("total", list .size());
+            return success().put("data", data);
+        }
         Page<Type> p = new Page<>(page, size);
         // 不为空 条件查询
         if (name == null || !Objects.equals(name, "")) {

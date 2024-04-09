@@ -4,16 +4,14 @@ import cn.com.v2.common.config.V2Config;
 import cn.com.v2.common.domain.AjaxResult;
 import cn.com.v2.model.SpuType;
 import cn.com.v2.model.TobaccoSpu;
+import cn.com.v2.model.Type;
 import cn.com.v2.service.TobaccoSpuService;
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -36,10 +34,42 @@ public class TobaccoSpuController {
 
     // 分页查询商品
     @GetMapping("/list")
-    public AjaxResult list(int current, int size) {
-        List<TobaccoSpu> list = tobaccoSpuService.list();
-        if (list != null) {
-            return success().put("data", list);
+    public AjaxResult list(int page, int size, String skuName) {
+        Page<TobaccoSpu> p = new Page<>(page, size);
+        // 不为空 条件查询
+        JSONObject data = new JSONObject();
+        if (skuName != null && !Objects.equals(skuName, "")) {
+            // 条件查询
+            Page<TobaccoSpu> list = tobaccoSpuService.selectBySkuName(p, skuName);
+            data.putOnce("total", list.getTotal());
+            data.putOnce("spus", list.getRecords());
+            data.putOnce("current", list.getCurrent());
+            data.putOnce("size", list.getSize());
+            return success().put("data", data);
+        }
+        Page<TobaccoSpu> pageList = tobaccoSpuService.page(p);
+        data.putOnce("total", pageList.getTotal());
+        data.putOnce("spus", pageList.getRecords());
+        data.putOnce("current", pageList.getCurrent());
+        data.putOnce("size", pageList.getSize());
+        return success().put("data", data);
+    }
+
+    // 保存或者更新商品
+    @PostMapping("/update")
+    public AjaxResult update(@RequestBody TobaccoSpu spu) {
+        // id不为空是更新
+        if (spu.getId() != null && !spu.getId().equals("")) {
+            boolean update = tobaccoSpuService.updateById(spu);
+            if (update) {
+                return success();
+            }
+            return error();
+        }
+        // id为空是插入
+        boolean save = tobaccoSpuService.save(spu);
+        if (save) {
+            return success();
         }
         return error();
     }
@@ -68,7 +98,7 @@ public class TobaccoSpuController {
                 if (tobaccoSellProfitTop10.isEmpty()) break;
                 JSONObject product = new JSONObject() {{
                     TobaccoSpu poll = tobaccoSellProfitTop10.poll();
-                    putOnce("product", poll.getName());
+                    putOnce("product", poll.getSkuName());
                     if (type == SpuType.TOBACCO.getCode()) putOnce("卷烟毛利率前十商品(百分比)", poll.getProfit());
                     else putOnce("非卷烟毛利率前十商品(百分比)", poll.getProfit());
 

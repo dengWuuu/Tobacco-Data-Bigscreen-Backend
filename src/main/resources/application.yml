@@ -1,46 +1,46 @@
 v2:
   #虚拟路径映射路径 2个文件路径一一对应 第一个为主存储，其他为配置相关
   xnljmap:
-   #win服务器  本地 注意！！ 记住这个结尾有一个/
-   oss: file:D:/GithubProject/go-view-serve/file/
-   #linux服务器
-   #oss: file:/home/webapps/oss/
+    #win服务器  本地 注意！！ 记住这个结尾有一个/
+    oss: file:D:/IdeaProject/Tobacco-Data-Bigscreen-Backend/file/
+    #linux服务器
+    #oss: file:/home/webapps/oss/
   #虚拟路径映射路径 end
   #本地存放地址 注意！！ 记住这个结尾没有/
-  fileurl: D:/GithubProject/go-view-serve/file/
+  fileurl: D:/IdeaProject/Tobacco-Data-Bigscreen-Backend/file
   #http://127.0.0.1:8080/oss/{yy}/2022-12-22/c83a77ae134a540c30daa6a0666fa945.md
   httpurl: http://127.0.0.1:8083/
   defaultFormat: .png
 #tomcat config
-server :
-  port : 8083
+server:
+  port: 8083
   ##项目名字配置
-  servlet :
-    context-path : /
+  servlet:
+    context-path: /
     #session过期
     session:
       timeout: PT4H
       #cookie:
       #  name: jxfgzs
-  tomcat :
-    uri-encoding : UTF-8
+  tomcat:
+    uri-encoding: UTF-8
     #xx 报错修改的地方
     max-connections: 200000
     max-http-form-post-size: 9000000
     threads:
       max: 128
       min-spare: 5
-spring :
+spring:
   # 环境 dev|test|prod
-  profiles :
-    active : dev
+  profiles:
+    active: dev
   servlet:
     multipart:
       #设置总上传的数据大小
       max-request-size: 100MB
       #单个文件大小
-      maxFileSize : 30MB
-        #xx 报错修改的地方
+      maxFileSize: 30MB
+      #xx 报错修改的地方
     max-connections: 200000
     max-http-post-size: 9000000
   #热部署模块
@@ -52,8 +52,8 @@ spring :
       additional-paths: src/main/java
       #指定目录不更新
       exclude: test/**
-  mvc:   #静态文件
-    static-path-pattern : /static/**
+  mvc: #静态文件
+    static-path-pattern: /static/**
     pathmatch:
       matching-strategy: ant_path_matcher
   #模板引擎
@@ -93,18 +93,18 @@ mybatis-plus:
     cache-enabled: false
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
-sa-token: 
-    # token名称 (同时也是cookie名称)
-    token-name: satoken
-    # token有效期，单位s 默认30天, -1代表永不过期 
-    timeout: 2592000
-    # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
-    activity-timeout: -1
-    # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录) 
-    is-concurrent: true
-    # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token) 
-    is-share: true
-    # token风格
-    token-style: uuid
-    # 是否输出操作日志 
-    is-log: false
+sa-token:
+  # token名称 (同时也是cookie名称)
+  token-name: satoken
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 2592000
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: true
+  # token风格
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: false
