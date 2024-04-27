@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @MapperScan("cn.com.v2.mapper")
-public class GogoApplication {
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GogoApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 }

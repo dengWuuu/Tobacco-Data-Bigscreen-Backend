@@ -139,6 +139,8 @@ public class TobaccoSellRecordServiceImpl extends ServiceImpl<TobaccoSellRecordM
 
             // 如果 map 中没有这个 key 则直接插入
             if (!map.containsKey(consumerId + "_" + spuName)) {
+                map.put(consumerId + "_" + spuName, false);
+            } else {
                 map.put(consumerId + "_" + spuName, true);
             }
         }
